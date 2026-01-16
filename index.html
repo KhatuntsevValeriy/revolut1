@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revolut AI Trade</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Inter, Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #ffffff;
+}
+
+.top_in{
+  border: 1px solid #ccc;
+}
+
+.logo span{
+  color: #ccc;
+}
+/* container */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+/* steps */
+.step {
+    display: none;
+    animation: fadeIn .6s ease forwards;
+}
+.step.active { display: block; }
+
+@keyframes fadeIn {
+    from {opacity:0; transform:translateY(20px)}
+    to {opacity:1; transform:translateY(0)}
+}
+
+/* STEP 1 */
+.start-card {
+  max-width: 780px;
+    
+}
+
+.start-card p{
+  border-radius: 10px;
+  padding: 10px;
+  background: #F4F4F4;
+  color: #000;
+}
+
+.start-card input{
+  width: 300px;
+  display: block;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.start-card button {
+    width: 300px;
+    margin-top: 20px;
+    display: block;
+    padding: 10px ;
+    font-size: 18px;
+    background: #4b5cff;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.logo {
+    font-weight: 700;
+}
+.register-btn {
+    background: #000;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+
+/* chart */
+.chart-wrap {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e5e5e5;
+}
+
+/* balance */
+.balance-bar {
+    background: #000;
+    color: #fff;
+    padding: 14px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* AI messages */
+.ai-messages {
+    
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 10;
+}
+
+.ai-msg {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.12);
+    opacity: 0;
+    transform: translateY(10px);
+    animation: msgShow .4s ease forwards;
+}
+
+@keyframes msgShow {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ai-msg.out {
+    animation: msgHide .4s ease forwards;
+}
+
+@keyframes msgHide {
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* popup */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    backdrop-filter: blur(7px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.popup {
+    background: #fff;
+    width: 380px;
+    padding: 26px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.popup input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.popup button {
+    width: 100%;
+    padding: 14px;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 767px){
+
+  .start-card input{
+    width: 100%;
+  }
+
+  .start-card button{
+    width: 100%;
+  }
+  
+  .popup p{
+    font-size: 14px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- STEP 1 -->
+    <div class="step active" id="step1">
+      
+
+      <div class="header">
+        <div class="logo">Revolut AI <span>trade</span></div>
+        <div class="register-btn" onclick="goStep2()">Регистрация</div>
+    </div>
+
+
+        <div class="start-card">
+            <div>
+              <img src="revolut.png" alt="">
+            </div>
+            <p>Привет, я - Revolut Al, искусственный интеллект от Revolut.</p>
+            <p>Я помогу тебе выйти на пассивный доход с помощью автоматической платформы. Сейчас покажу, как зарабатывать от 250 € в день, даже без опыта.</p>
+            <p>Чтобы начать, просто укажи своё имя и фамилию и нажми кнопку "Начать"! </p>
+            <div>
+              <input type="text" placeholder="Имя" class="top_in">
+            </div>
+            <div>
+              <input type="text" placeholder="Фамилия" class="top_in">
+            </div>
+
+            <div>
+              <button onclick="goStep2()">Начать</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="step2">
+
+        <div class="header">
+            <div class="logo">Revolut AI trade</div>
+            <div class="register-btn">Регистрация</div>
+        </div>
+
+        <div class="chart-wrap">
+            <div class="tradingview-widget-container">
+                <div id="tradingview_chart" style="height:420px;"></div>
+            </div>
+
+            <div class="balance-bar">Баланс: 175€</div>
+        </div>
+
+        <!-- AI messages -->
+         <p>
+          <img src="revolut.png" alt="">
+         </p>
+        <div class="ai-messages" id="aiMessages"></div>
+
+    </div>
+
+</div>
+
+<!-- POPUP -->
+<div class="overlay" id="overlay">
+    <div class="popup">
+        <p>
+          Ваш доход за время работы мог бы составить
+          <br>
+          <b>283 евро</b>, если бы Вы были участником 
+          <br>
+          <b>платформы Revolut Al trade.</b>
+        </p>
+        <form action="">
+          <input placeholder="Ваше имя"  required>
+          <input placeholder="Ваша фамилия" required>
+          <input placeholder="+32 470 12 34 56" required>
+          <button>Зарегистрироваться</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://s3.tradingview.com/tv.js"></script>
+
+<script>
+function goStep2() {
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+
+    new TradingView.widget({
+        autosize: true,
+        symbol: "NASDAQ:TSLA",
+        interval: "15",
+        timezone: "Europe/Kiev",
+        theme: "light",
+        style: "1",
+        locale: "ru",
+        hide_top_toolbar: true,
+        hide_side_toolbar: true,
+        container_id: "tradingview_chart"
+    });
+
+    startAIMessages();
+
+    setTimeout(() => {
+        document.getElementById('overlay').style.display = 'flex';
+    }, 12000);
+}
+
+/* AI messages */
+const messagesPool = [
+    "🤖 AI анализирует рынок...",
+    "📊 Найден восходящий тренд",
+    "📈 Акции Tesla выросли на 56%!.",
+    "🟢 Открыта сделка BUY TSLA",
+    "✅ Успешно",
+    "💰 Прибыль +108€",
+    "🔄 Поиск новой сделки"
+];
+
+let msgIndex = 0;
+
+function startAIMessages() {
+    const box = document.getElementById('aiMessages');
+
+    setInterval(() => {
+        const msg = document.createElement('div');
+        msg.className = 'ai-msg';
+        msg.innerText = messagesPool[msgIndex % messagesPool.length];
+        msgIndex++;
+
+        box.appendChild(msg);
+
+        if (box.children.length > 3) {
+            const first = box.children[0];
+            first.classList.add('out');
+            setTimeout(() => first.remove(), 400);
+        }
+    }, 2200);
+}
+</script>
+
+</body>
+</html>
